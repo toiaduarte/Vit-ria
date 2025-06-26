@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual Blockly para Dash</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🤖 Manual Blockly – Robô Dash</h1>
+    <p>Interativo, prático e divertido. Aprenda com vídeos, áudio, Blockly e animações!</p>
+  </header>
+
+
+  <main>
+    <!-- Começar com passos -->
+    <section class="card passos">
+      <h2>🚀 Começar</h2>
+     
+      <div class="passo">
+        <button onclick="mostrarConteudo('ligar')">1️⃣ Ligar o Robô</button>
+        <div class="conteudo" id="ligar">
+          <p>Pressione o botão central na cabeça do Dash até ele acender.</p>
+          <video controls src="videos/ligar-dash.mp4"></video>
+          <button class="audio-btn" onclick="playAudio('audio/ligar.mp3')">🔊 Dica em áudio</button>
+        </div>
+      </div>
+
+
+      <div class="passo">
+        <button onclick="mostrarConteudo('conectar')">2️⃣ Conectar ao App</button>
+        <div class="conteudo" id="conectar">
+          <p>Abra o app Blockly e toque no ícone do Dash para conectar via Bluetooth.</p>
+          <img src="imagens/conectar-app.png" alt="Conectar App Blockly" />
+          <button class="audio-btn" onclick="playAudio('audio/conectar.mp3')">🔊 Dica em áudio</button>
+        </div>
+      </div>
+
+
+      <div class="passo">
+        <button onclick="mostrarConteudo('criar')">3️⃣ Criar Projeto</button>
+        <div class="conteudo" id="criar">
+          <p>Toque em “Novo Projeto” no app para começar a programar!</p>
+          <video controls src="videos/criar-projeto.mp4"></video>
+          <button class="audio-btn" onclick="playAudio('audio/criar.mp3')">🔊 Dica em áudio</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Blockly interativo -->
+    <section class="card">
+      <h2>📦 Experimente Blockly</h2>
+      <!-- Exemplo embed: adaptar para seu app Blockly se disponível -->
+      <p>Arraste os blocos abaixo para montar o código:</p>
+      <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+      <button onclick="gerarCodigoBlockly()">Gerar código JavaScript</button>
+      <pre id="codigoBlockly"></pre>
+    </section>
+
+
+    <!-- Animação SVG do Dash -->
+    <section class="card">
+      <h2>🎨 Animação do Dash</h2>
+      <svg id="dashSvg" viewBox="0 0 200 100">
+        <!-- Representação simples -->
+        <circle id="dashBody" cx="50" cy="50" r="30" fill="#00BCD4"/>
+        <circle id="dashEye" cx="60" cy="40" r="5" fill="#fff"/>
+      </svg>
+      <button onclick="animarDash()">Fazer Dash piscar e andar</button>
+    </section>
+
+
+    <!-- Variável + interativo -->
+    <section class="card">
+      <h2>🧪 Teste você mesmo – Variável</h2>
+      <label for="valorPassos">Quantos passos?</label>
+      <input type="number" id="valorPassos" value="3" min="1" max="10">
+      <button onclick="mostrarComando()">Gerar Código</button>
+      <pre id="saidaCodigo"></pre>
+    </section>
+  </main>
+
+
+  <footer>
+    <p>&copy; 2025 Manual Blockly para Dash 🤖</p>
+  </footer>
+
+
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  <script>
+    // Interação dos passos
+    function mostrarConteudo(id) {
+      document.querySelectorAll('.conteudo').forEach(el => el.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+
+    function playAudio(src) {
+      new Audio(src).play();
+    }
+
+
+    // Blockly
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: `<xml>
+        <block type="variables_set"></block>
+        <block type="math_number"></block>
+        <block type="controls_repeat_ext"></block>
+        <block type="procedures_defnoreturn"></block>
+      </xml>`
+    });
+
+
+    function gerarCodigoBlockly() {
+      const code = Blockly.JavaScript.workspaceToCode(workspace);
+      document.getElementById('codigoBlockly').textContent = code;
+    }
+
+
+    // Animação SVG
+    function animarDash() {
+      const eye = document.getElementById('dashEye');
+      const body = document.getElementById('dashBody');
+      eye.setAttribute('fill', '#000');
+      setTimeout(() => eye.setAttribute('fill', '#fff'), 200);
+      body.animate([{ transform: 'translateX(0px)' }, { transform: 'translateX(50px)' }], {
+        duration: 1000,
+        fill: 'forwards'
+      });
+    }
+
+
+    // Variável
+    function mostrarComando() {
+      const valor = document.getElementById("valorPassos").value;
+      document.getElementById("saidaCodigo").textContent =
+`definir passos para ${valor}
+repita passos vezes:
+    Dash anda para frente`;
+    }
+  </script>
+</body>
+</html>
+
